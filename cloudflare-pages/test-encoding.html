@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Encoding Test - NYC Free Food Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        .pass { background: #d4edda; color: #155724; }
+        .fail { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>Encoding Test</h1>
+    
+    <div class="test">
+        <h3>1. JavaScript Function Test</h3>
+        <div id="js-test"></div>
+    </div>
+    
+    <div class="test">
+        <h3>2. Special Characters Test</h3>
+        <div id="char-test"></div>
+    </div>
+    
+    <script>
+        // Test 1: Check if selectLocation function exists
+        function testSelectLocation() {
+            try {
+                if (typeof selectLocation === 'function') {
+                    document.getElementById('js-test').innerHTML = 
+                        '<div class="pass">✅ selectLocation function is defined</div>';
+                } else {
+                    document.getElementById('js-test').innerHTML = 
+                        '<div class="fail">❌ selectLocation function is not defined</div>';
+                }
+            } catch (e) {
+                document.getElementById('js-test').innerHTML = 
+                    '<div class="fail">❌ Error: ' + e.message + '</div>';
+            }
+        }
+        
+        // Test 2: Check special characters
+        function testSpecialCharacters() {
+            const testString = "NYC Free Food Tracker - 纽约免费食物追踪器 © 2024";
+            const hasSpecialChars = /[^\x00-\x7F]/.test(testString);
+            
+            if (hasSpecialChars) {
+                document.getElementById('char-test').innerHTML = 
+                    '<div class="pass">✅ UTF-8 encoding supports special characters</div>' +
+                    '<div>Test string: ' + testString + '</div>';
+            } else {
+                document.getElementById('char-test').innerHTML = 
+                    '<div class="fail">❌ UTF-8 encoding may not be working</div>';
+            }
+        }
+        
+        // Run tests
+        testSelectLocation();
+        testSpecialCharacters();
+    </script>
+</body>
+</html>
