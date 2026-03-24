@@ -1,0 +1,5 @@
+name = "nyc-free-food-tracker"
+compatibility_date = "2024-03-22"
+
+[pages]
+bucket = "./cloudflare-pages"

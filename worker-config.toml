@@ -1,0 +1,13 @@
+name = "nyc-free-food-tracker-worker"
+type = "javascript"
+account_id = "e3c8c6f5f5f5f5f5f5f5f5f5f5f5f5f"
+compatibility_date = "2024-03-22"
+
+[vars]
+HTML_CONTENT = """$(cat cloudflare-pages/index.html | python3 -c "import sys, json; print(json.dumps(sys.stdin.read()))")"""
+CSS_CONTENT = """$(cat cloudflare-pages/css/styles.css | python3 -c "import sys, json; print(json.dumps(sys.stdin.read()))")"""
+JS_CONTENT = """$(cat cloudflare-pages/js/app.js | python3 -c "import sys, json; print(json.dumps(sys.stdin.read()))")"""
+
+[[kv_namespaces]]
+binding = "ASSETS"
+id = "00000000000000000000000000000000"

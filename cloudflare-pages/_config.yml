@@ -1,0 +1,6 @@
+# Cloudflare Pages Configuration
+name: nyc-free-food-tracker
+production_branch: main
+build_command: echo "No build needed for static site"
+output_dir: .
+root_dir: cloudflare-pages

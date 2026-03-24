@@ -1,0 +1,6 @@
+name = "nyc-free-food-tracker"
+compatibility_date = "2024-03-22"
+
+[env.production]
+account_id = "e3c8c6f5f5f5f5f5f5f5f5f5f5f5f5f"
+pages_build_output_dir = "./cloudflare-pages"

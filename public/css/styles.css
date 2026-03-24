@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .filter-btn {
+        @apply flex items-center px-4 py-3 rounded-lg border-2 font-medium transition-all duration-200 hover:shadow-md;
+    }
+    
+    .filter-btn.active {
+        @apply ring-2 ring-offset-2;
+    }
+    
+    .location-card {
+        @apply bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer;
+    }
+    
+    .location-card:hover {
+        @apply border-blue-300;
+    }
+    
+    .location-card.active {
+        @apply border-blue-500 bg-blue-50;
+    }
+    
+    .category-badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    }
+    
+    .category-pantry {
+        @apply bg-green-100 text-green-800;
+    }
+    
+    .category-grabgo {
+        @apply bg-orange-100 text-orange-800;
+    }
+    
+    .category-fridge {
+        @apply bg-purple-100 text-purple-800;
+    }
+    
+    .leaflet-popup-content {
+        @apply font-sans;
+    }
+    
+    .leaflet-popup-content h3 {
+        @apply font-bold text-lg mb-1 text-gray-800;
+    }
+    
+    .leaflet-popup-content p {
+        @apply text-sm text-gray-600 mb-1;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+}
+
+/* Map marker clusters */
+.marker-cluster-small {
+    background-color: rgba(181, 226, 140, 0.6);
+}
+
+.marker-cluster-small div {
+    background-color: rgba(110, 204, 57, 0.6);
+}
+
+.marker-cluster-medium {
+    background-color: rgba(241, 211, 87, 0.6);
+}
+
+.marker-cluster-medium div {
+    background-color: rgba(240, 194, 12, 0.6);
+}
+
+.marker-cluster-large {
+    background-color: rgba(253, 156, 115, 0.6);
+}
+
+.marker-cluster-large div {
+    background-color: rgba(241, 128, 23, 0.6);
+}

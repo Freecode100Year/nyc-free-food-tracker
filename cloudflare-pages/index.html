@@ -1,0 +1,204 @@
+                locationList.innerHTML = filteredLocations.map((location, index) => {
+                    // Find the original index in allLocations
+                    const originalIndex = allLocations.findIndex(loc => 
+                        loc.name === location.name && 
+                        loc.latitude === location.latitude && 
+                        loc.longitude === location.longitude
+                    );
+                    return createLocationCard(location, originalIndex);
+                }).join('');
+            }
+            
+            // Select location in list and on map
+            window.selectLocation = function(index) {
+                selectedLocationId = index;
+                updateLocationList();
+                
+                // Find and open the corresponding marker popup
+                markers.eachLayer(function(marker) {
+                    if (marker.locationId === index) {
+                        map.setView([marker.getLatLng().lat, marker.getLatLng().lng], 15);
+                        marker.openPopup();
+                    }
+                });
+            };
+            
+            // Focus on location on map
+            window.focusOnMap = function(index) {
+                const location = allLocations[index];
+                if (location) {
+                    map.setView([location.latitude, location.longitude], 16);
+                    
+                    // Find and open the marker popup
+                    markers.eachLayer(function(marker) {
+                        if (marker.locationId === index) {
+                            marker.openPopup();
+                        }
+                    });
+                }
+            };
+            
+            // Select location in list when marker is clicked
+            function selectLocationInList(index) {
+                selectedLocationId = index;
+                updateLocationList();
+            }
+            
+            // Update count badges
+            function updateCountBadges() {
+                const counts = {
+                    'all': allLocations.length,
+                    'Pantry': allLocations.filter(l => l.category === 'Pantry').length,
+                    'Grab & Go': allLocations.filter(l => l.category === 'Grab & Go').length,
+                    'Community Fridge': allLocations.filter(l => l.category === 'Community Fridge').length
+                };
+                
+                for (const [category, count] of Object.entries(counts)) {
+                    if (countElements[category]) {
+                        countElements[category].textContent = count;
+                    }
+                }
+            }
+            
+            // Filter locations
+            window.filterLocations = function(filter) {
+                currentFilter = filter;
+                
+                // Update button states
+                filterButtons.forEach(button => {
+                    const btnFilter = button.getAttribute('onclick').includes(`'${filter}'`);
+                    if (btnFilter) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+                
+                // Update map and list
+                updateMapMarkers();
+                updateLocationList();
+            };
+            
+            // Sample data (for demo - in production this would come from an API)
+            function getSampleData() {
+                const now = new Date();
+                const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const todayName = days[now.getDay()];
+                const tomorrowName = days[(now.getDay() + 1) % 7];
+                
+                return [
+                    {
+                        name: 'St. John\'s Food Pantry',
+                        address: '123 Main St, Manhattan, NY 10001',
+                        latitude: 40.7489,
+                        longitude: -73.9680,
+                        hours: `${todayName}: 10am-2pm, ${tomorrowName}: 9am-1pm`,
+                        category: 'Pantry',
+                        description: 'Food pantry providing fresh produce and groceries'
+                    },
+                    {
+                        name: 'Community Kitchen NYC',
+                        address: '456 Broadway, Brooklyn, NY 11201',
+                        latitude: 40.6782,
+                        longitude: -73.9442,
+                        hours: `${todayName}: 12pm-4pm, ${tomorrowName}: 11am-3pm`,
+                        category: 'Grab & Go',
+                        description: 'Hot meals served to go'
+                    },
+                    {
+                        name: 'Williamsburg Community Fridge',
+                        address: '789 Bedford Ave, Brooklyn, NY 11211',
+                        latitude: 40.7081,
+                        longitude: -73.9571,
+                        hours: '24/7 Accessible',
+                        category: 'Community Fridge',
+                        description: 'Take what you need, leave what you can'
+                    },
+                    {
+                        name: 'Queens Food Distribution',
+                        address: '321 Queens Blvd, Queens, NY 11373',
+                        latitude: 40.7282,
+                        longitude: -73.7949,
+                        hours: `${todayName}: 9am-1pm`,
+                        category: 'Pantry',
+                        description: 'Weekly food distribution'
+                    },
+                    {
+                        name: 'Bronx Soup Kitchen',
+                        address: '654 Fordham Rd, Bronx, NY 10458',
+                        latitude: 40.8628,
+                        longitude: -73.8825,
+                        hours: `${tomorrowName}: 11am-2pm`,
+                        category: 'Grab & Go',
+                        description: 'Hot soup and sandwiches'
+                    },
+                    {
+                        name: 'Harlem Food Pantry',
+                        address: '125th St, Manhattan, NY 10027',
+                        latitude: 40.8075,
+                        longitude: -73.9464,
+                        hours: `${todayName}: 11am-3pm`,
+                        category: 'Pantry',
+                        description: 'Community food pantry'
+                    },
+                    {
+                        name: 'Staten Island Community Fridge',
+                        address: 'Bay St, Staten Island, NY 10301',
+                        latitude: 40.6368,
+                        longitude: -74.0868,
+                        hours: '24/7 Accessible',
+                        category: 'Community Fridge',
+                        description: 'Community refrigerator'
+                    }
+                ];
+            }
+            
+            // Load food locations
+            async function loadFoodLocations() {
+                try {
+                    loadingOverlay.style.display = 'flex';
+                    
+                    // For Cloudflare Pages demo, use sample data
+                    // In production, you would fetch from an API
+                    allLocations = getSampleData();
+                    
+                    // Update UI
+                    updateCountBadges();
+                    updateMapMarkers();
+                    updateLocationList();
+                    
+                    // Update last updated time
+                    const now = new Date();
+                    lastUpdatedElement.textContent = now.toLocaleTimeString([], { 
+                        hour: '2-digit', 
+                        minute: '2-digit',
+                        hour12: true 
+                    });
+                    
+                    console.log(`Loaded ${allLocations.length} food locations`);
+                    
+                } catch (error) {
+                    console.error('Error loading food locations:', error);
+                    locationList.innerHTML = `
+                        <div class="text-center text-red-500 py-8">
+                            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                            <p class="font-medium">Failed to load food locations</p>
+                            <p class="text-sm mt-1">Please try refreshing the page</p>
+                        </div>
+                    `;
+                } finally {
+                    loadingOverlay.style.display = 'none';
+                }
+            }
+            
+            // Initial load
+            loadFoodLocations();
+            
+            // Auto-refresh every 10 minutes
+            setInterval(loadFoodLocations, 10 * 60 * 1000);
+        });
+    </script>
+</body>
+</html>
